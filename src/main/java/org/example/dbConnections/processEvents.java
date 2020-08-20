@@ -1,6 +1,7 @@
 package org.example.dbConnections;
 
 import com.mongodb.client.MongoCollection;
+import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Aggregates;
 import com.mongodb.client.model.Filters;
 import org.bson.Document;
@@ -11,10 +12,9 @@ import java.util.List;
 
 public class processEvents {
     private MongoCollection<Document> events;
-
-    public processEvents(){
-        Connection connectToDB = new Connection();
-        events = connectToDB.database.getCollection("accounts");
+    private MongoDatabase database;
+    public processEvents(MongoDatabase database){
+        this.database = database;
     }
 
     //Fetch the list of all the events
@@ -39,7 +39,7 @@ public class processEvents {
         Bson match = Aggregates.match(Filters.eq("account_id", id));
         pipeline.add(match);
         // retrieved with Events
-        Document event = events.aggregate(pipeline).first();
+        Document event = database.getCollection("pegaEvents").aggregate(pipeline).first();
         return event;
     }
 
