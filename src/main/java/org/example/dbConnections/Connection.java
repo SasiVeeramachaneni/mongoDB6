@@ -1,24 +1,20 @@
 package org.example.dbConnections;
 
-import com.mongodb.ConnectionString;
-import com.mongodb.MongoClientSettings;
-import com.mongodb.client.MongoClient;
-import com.mongodb.client.MongoClients;
+import com.mongodb.MongoClient;
+import com.mongodb.MongoClientURI;
 import com.mongodb.client.MongoDatabase;
 
 public class Connection {
     MongoDatabase database;
 
-    public Connection(String dbName){
-        ConnectionString connString = new ConnectionString(
-                "mongodb+srv://dbUser:dbPassword@cluster0-1bxg9.mongodb.net/");
+    public Connection(){
 
-        MongoClientSettings settings = MongoClientSettings.builder()
-                .applyConnectionString(connString)
-                .retryWrites(true)
-                .build();
-        MongoClient mongoClient = MongoClients.create(settings);
-        this.database = mongoClient.getDatabase(dbName);
+        MongoDatabase database;
+        MongoClientURI uri = new MongoClientURI("mongodb+srv://dbUser:dbPassword@cluster0-1bxg9.mongodb.net/sample_analytics?retryWrites=true");
+        MongoClient mongoClient = new MongoClient(uri);
+        this.database = mongoClient.getDatabase("sample_analytics");
+
+
     }
 
 

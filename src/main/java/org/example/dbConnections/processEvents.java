@@ -13,7 +13,7 @@ public class processEvents {
     private MongoCollection<Document> events;
 
     public processEvents(){
-        Connection connectToDB = new Connection("sample_analytics");
+        Connection connectToDB = new Connection();
         events = connectToDB.database.getCollection("accounts");
     }
 
