@@ -5,10 +5,15 @@ import java.util.UUID;
 
 public class Event {
     Event(String title, String author, LocalDateTime eventTime){
+        super();
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.author = author;
         this.eventTime = eventTime;
+    }
+
+    Event() {
+        this.id = UUID.randomUUID().toString();
     }
 
     private String id;

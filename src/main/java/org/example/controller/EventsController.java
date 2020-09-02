@@ -14,12 +14,20 @@ package org.example.controller;/*
  * authorization from Pegasystems Inc.
  */
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoDatabase;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import org.bson.Document;
+import org.example.models.Event;
 import org.example.models.GetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,6 +36,7 @@ import org.springframework.web.bind.annotation.RestController;
  * @version $ 8/20/20
  */
 @RestController
+@RequestMapping("/events")
 public class EventsController {
     @Autowired
     MongoDatabase database;
@@ -37,6 +46,7 @@ public class EventsController {
     }
 
     @RequestMapping("/events")
+    @GetMapping
     public GetResponse getEvents(){
         List<Document> results = new ArrayList<>();
         for (Document pegaEvents : database.getCollection("pegaEvents").find()) {
@@ -46,4 +56,33 @@ public class EventsController {
         response.setResults(results);
         return  response;
     }
+
+
+    @PostMapping
+    public void addEvent(@RequestBody Event event) {
+
+        System.out.println(event.getAuthor());
+        ObjectMapper mapper = new ObjectMapper();
+
+        try {
+            String jsonStr = mapper.writeValueAsString(event);
+            TypeReference<HashMap<String, Object>> typeRef
+                    = new TypeReference<HashMap<String, Object>>() {
+            };
+
+            HashMap<String, Object> document = mapper.readValue(jsonStr, typeRef);
+            database.getCollection("pegaEvents").insertOne(new Document(document));
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+   /* @RequestMapping("/events/{ID}")
+    @GetMapping
+    public ResponseEntity<Document> getEvent(@PathParam("ID") String id) {
+        Document doc = database.getCollection("pegaEvents").find(Filters.and(Filters.eq("id", id))).first();
+        return new ResponseEntity<Document>(doc, HttpStatus.OK);
+    }*/
 }
