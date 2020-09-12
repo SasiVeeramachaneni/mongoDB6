@@ -18,18 +18,15 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mongodb.client.MongoDatabase;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 import org.bson.Document;
 import org.example.models.Event;
 import org.example.models.GetResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * @author vagrant
@@ -44,8 +41,7 @@ public class EventsController {
     public String index() {
         return "Greetings from Spring Boot!";
     }
-
-    @RequestMapping("/events")
+    @CrossOrigin(origins = "*")
     @GetMapping
     public GetResponse getEvents(){
         List<Document> results = new ArrayList<>();
@@ -59,9 +55,9 @@ public class EventsController {
 
 
     @PostMapping
+    @CrossOrigin(origins = "*")
     public void addEvent(@RequestBody Event event) {
 
-        System.out.println(event.getAuthor());
         ObjectMapper mapper = new ObjectMapper();
 
         try {

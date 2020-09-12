@@ -4,12 +4,14 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 public class Event {
-    Event(String title, String author, LocalDateTime eventTime){
+    Event(String title, String author, LocalDateTime eventTime, String documentsLink, String webExLink){
         super();
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.author = author;
         this.eventTime = eventTime;
+        this.documentsLink = documentsLink;
+        this.webExLink = webExLink;
     }
 
     Event() {
@@ -20,6 +22,24 @@ public class Event {
     private String title;
     private String author;
     private LocalDateTime eventTime;
+    private String webExLink;
+    private String documentsLink;
+
+    public String getWebExLink() {
+        return webExLink;
+    }
+
+    public void setWebExLink(String webExLink) {
+        this.webExLink = webExLink;
+    }
+
+    public String getDocumentsLink() {
+        return documentsLink;
+    }
+
+    public void setDocumentsLink(String documentsLink) {
+        this.documentsLink = documentsLink;
+    }
 
     public String getId() {
         return id;
